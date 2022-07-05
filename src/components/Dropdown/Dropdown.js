@@ -21,7 +21,11 @@ const Dropdown = ({ title, options }) => {
         <div className="dropdown__body">
           <ul>
             {options.map((option) => (
-              <li key={option.id} onClick={() => setSelectedValue(option.id)}>
+              <li
+                key={option.id}
+                data-testid="option"
+                onClick={() => setSelectedValue(option.id)}
+              >
                 {option.label}
               </li>
             ))}
