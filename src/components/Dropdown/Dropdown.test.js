@@ -16,23 +16,39 @@ const validProps = {
 };
 
 describe('<Dropdown/>', () => {
-  it('renders button with correct text', () => {
-    const { getByRole } = render(<Dropdown title="Dummy title" options={[]} />);
-    expect(getByRole('button')).toHaveTextContent('Dummy title');
+  describe('when mounted', () => {
+    const { getByRole, screen } = render(
+      <Dropdown title="Dummy title" options={[]} />
+    );
+
+    it('renders button with correct text', () => {
+      expect(getByRole('button')).toHaveTextContent('Dummy title');
+    });
+
+    it('has expected HTML structure', () => {
+      expect(screen).toMatchSnapshot();
+    });
   });
 
-  it('renders correct number of options', () => {
-    render(<Dropdown title="Dummy title" options={validProps.options} />);
-    const button = screen.getByRole('button');
-    fireEvent.click(button);
-    expect(screen.getAllByTestId('option').length).toBe(2);
-  });
+  describe('when button clicked', () => {
+    let button;
+    beforeEach(() => {
+      render(<Dropdown title="Dummy title" options={validProps.options} />);
+      button = screen.getByRole('button');
+      fireEvent.click(button);
+    });
 
-  it('updates button with correct value on selection', () => {
-    render(<Dropdown title="Dummy title" options={validProps.options} />);
-    const button = screen.getByRole('button');
-    fireEvent.click(button);
-    fireEvent.click(screen.getAllByTestId('option')[0]);
-    expect(button).toHaveTextContent('Dummy title - Label 1');
+    it('renders correct number of options', () => {
+      expect(screen.getAllByTestId('option').length).toBe(2);
+    });
+
+    it('updates button with correct value on selection', () => {
+      fireEvent.click(screen.getAllByTestId('option')[0]);
+      expect(button).toHaveTextContent('Dummy title - Label 1');
+    });
+
+    it('has expected HTML structure', () => {
+      expect(screen).toMatchSnapshot();
+    });
   });
 });
